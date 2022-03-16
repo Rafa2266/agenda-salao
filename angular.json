@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "agenda-salao"
+    }
+  },
+  "defaultProject": "agenda-salao",
+  "cli": {
+    "analytics": "6a7db651-cad8-44cd-bb0d-4d40dda14624"
+  }
 }
