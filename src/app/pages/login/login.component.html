@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="card bg-gray w-50 mt-3 shadow">
+    <div class="card bg-gray w-50 mt-3 shadow-lg">
         <div class="card-header bg-primary px-0">
             <div class="row">
                 <div class="container col-12 px-0">
@@ -12,17 +12,17 @@
             </div>
         </div>
         <div class="card-body" style="background-color:rgb(231, 231, 231)">
-            <form class=" form-row px-5 pt-3 pb-2">
+            <form [formGroup]="formLogin" class="form-row px-5 pt-3 pb-2">
                 <div class="col-12 pb-4">
                     <label class="h4 text-bold">Email</label>
-                    <input class="form-control" type="email" />
+                    <input class="form-control" formControlName="email" type="email" />
                 </div>
                 <div class="col-12 pb-4">
                     <label class="h4 text-bold">Password</label>
-                    <input class=" form-control" type="password" />
+                    <input class=" form-control" formControlName="password" type="password" />
                 </div>
                 <div class="container col-12 pb-4">
-                    <button class="btn btn-primary mt-3 px-5 mb-0" style="font-size:30px;" type="submit">Login</button>
+                    <button class="btn btn-primary  mt-3 px-5 mb-0" (click)="loginCheck()" [ngClass]="{'disabled': !formLogin.valid}" style="font-size:30px;" type="submit">Login</button>
                 </div>
             </form>
         </div>
