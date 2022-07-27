@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import bootstrap from 'bootstrap'
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +6,5 @@ import bootstrap from 'bootstrap'
 })
 export class AppComponent {
   title = 'agenda-salao';
+
 }

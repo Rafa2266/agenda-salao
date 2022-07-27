@@ -13,10 +13,7 @@ export class AgendaComponent implements OnInit {
   constructor(private session:LocalStorageService, private router:Router) { }
 
   ngOnInit(): void {
-    this.user=this.session.get('user')
-    if(!this.user){
-      this.router.navigate(['/login'])
-    }
+    
   }
 
 }

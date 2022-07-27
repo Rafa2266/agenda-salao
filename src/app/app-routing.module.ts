@@ -1,3 +1,5 @@
+import { ServicoComponent } from './pages/servico/servico.component';
+import { UserComponent } from './pages/user/user.component';
 import { AgendaComponent } from './pages/agenda/agenda.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -8,6 +10,8 @@ const routes: Routes = [
   { path: '', redirectTo: 'agenda', pathMatch: 'full' },
   {path:"agenda", component:AgendaComponent},
   {path:"login", component:LoginComponent},
+  {path:"user", component:UserComponent},
+  {path:"servico", component:ServicoComponent},
 ];
 
 @NgModule({

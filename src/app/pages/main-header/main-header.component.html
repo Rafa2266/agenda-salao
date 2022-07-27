@@ -1,34 +1,28 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-
-
-    <a class="navbar-brand" href="#">
-        <!--<img class="logo d-inline-block align-top" src="assets/img/logo.jpg" />-->Lauar Coiffeur</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#conteudoNavbarSuportado" aria-controls="conteudoNavbarSuportado" aria-expanded="false" aria-label="Alterna navegação">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(página atual)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown
-          </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Ação</a>
-                    <a class="dropdown-item" href="#">Outra ação</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Algo mais aqui</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Desativado</a>
-            </li>
-        </ul>
+    <div class="container-fluid">
+        <a class="navbar-brand" style="margin-right:2em;" href="#"><img class="" src="assets/img/logo.jpg" class="logo">
+            <h4 class="mb-0" style="margin-left:0.6em;font-size:0.7em;">Lauar Coiffeur</h4>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class=" navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/agenda">Agenda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/user">Usuários</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/servico">Serviços</a>
+                </li>
+            </ul>
+            <ul class=" navbar-nav mr-auto mb-2 mb-lg-0 ">
+                <li class="nav-item logout" style="list-style-type: none">
+                    <a class="nav-link active logout fa fa-sign-out" (click)="logOut();" href="#"></a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>

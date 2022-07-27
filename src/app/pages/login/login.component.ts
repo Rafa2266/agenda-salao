@@ -7,7 +7,7 @@ import {
   FormControl,
   Validators,
 } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { UserService } from 'src/app/services/UserService.service';
 import { Router } from '@angular/router';
 
@@ -16,8 +16,12 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit{
+   
+  //@Output() onLoading=  new EventEmitter<boolean>();
   formLogin: FormGroup;
+  message:String=null;
+  isLoading=false;
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
@@ -43,12 +47,21 @@ export class LoginComponent implements OnInit {
       let userLogin = new UserLogin();
       userLogin.Email = this.formLogin.getRawValue().email;
       userLogin.password = this.formLogin.getRawValue().password;
+      this.isLoading=true;
       this.userService.checkLogin(userLogin).subscribe(
         (response: User) => {
-          this.session.set('user',response,1000*60*60*8);
-          this.router.navigate(['/agenda'])
+          this.isLoading=false;
+          if(response){
+            this.session.set('user',response,1000*60*60*8);
+            this.router.navigate(['/agenda'])
+          }else{
+              this.message="Senha ou email incorretos"
+          }    
+          
         },
         (error) => {
+          this.isLoading=false;
+          this.message="Erro no servidor"
           console.log(error);
         }
       );

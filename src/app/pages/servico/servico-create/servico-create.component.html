@@ -1,0 +1,30 @@
+<div class="modal-header justify-content-between row pt-0">
+
+    <div class="col-12" (click)="closeModal()" style="cursor: pointer;display: flex;justify-content: right;font-size: 2em;">
+        <span aria-hidden="true">×</span>
+    </div>
+    <h3 *ngIf="!isEdit" class="modal-tilte align-self-center">Novo Serviço</h3>
+    <h3 *ngIf="isEdit" class="modal-tilte align-self-center">Editando Serviço</h3>
+</div>
+<div class="modal-body " style="background-color:rgb(218, 218, 218)">
+    <form [formGroup]="formServico" class=" form-row row">
+        <div class="col-6 pb-3">
+            <label class="h4 text-bold">Nome</label>
+            <input class="form-control" formControlName="Nome" placeholder="Nome do serviço" maxlength="250" type="text" />
+        </div>
+        <div class="col-6 pb-3">
+            <label class="h4 text-bold">Valor recomendado (R$)</label>
+            <input class="form-control" formControlName="Valor_recomendado" placeholder="00,00" type="number" />
+        </div>
+        <div class="col-6 pb-3">
+            <label class="h4 text-bold">Tempo recomendado (minutos)</label>
+            <input class="form-control" formControlName="Tempo_recomendado" placeholder="Tempo em minutos" type="number" />
+        </div>
+
+
+        <div class="container col-12 pb-4" style="display: flex;justify-content: center;">
+            <button *ngIf="!isEdit" class="btn btn-primary  mt-3 px-5 mb-0" (click)="createServico()" [ngClass]="{'disabled': !formServico.valid}" style="font-size:30px;" type="submit">Criar Usuário</button>
+            <button *ngIf="isEdit" class="btn btn-primary  mt-3 px-5 mb-0" (click)="editServico()" [ngClass]="{'disabled': !formServico.valid}" style="font-size:30px;" type="submit">Editar Usuário</button>
+        </div>
+    </form>
+</div>

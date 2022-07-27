@@ -1,1 +1,18 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import'font-awesome-4.7.0/css/font-awesome.min.css';
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+.loading {
+    opacity: 0.5;
+}
+
+input.ng-invalid {
+    border: 1px solid red;
+}
+
+select.ng-invalid {
+    border: 1px solid red;
+}
+
+.title-page {
+    color: rgb(18, 18, 34);
+}

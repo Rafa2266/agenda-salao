@@ -1,0 +1,64 @@
+<main-header></main-header>
+<h2 class="mt-3 mb-2 mx-4 title-page">Serviços</h2>
+<hr class="mt-2" style="border: 1px solid #444444; width:100%; " />
+<div class="row px-2 mt-3 " [ngClass]="{'loading': isLoading}">
+    <div class="col-12 mb-2" id="addUser">
+        <button (click)="showCreateModal(null)" class="btn btn-dark">
+           Adicionar serviços <span class="ml-2 fa fa-plus"></span>
+        </button>
+    </div>
+    <div class="col-12">
+        <div class="list-group">
+            <div class="list-group-item first-item text-bold text-white bg-primary">
+                <div class="row">
+                    <div class="col-3">
+                        <div>Nome</div>
+                    </div>
+                    <div class="col-3">
+                        <div>Valor recomendado</div>
+                    </div>
+                    <div class="col-5">
+                        <div>Tempo recomendado (minutos) </div>
+                    </div>
+                    <div class="col-1">
+                        <div>Opções</div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-group-item list-group-item-action border-black" *ngFor="let servico of servicos">
+                <div class="row">
+                    <div class="col-3">
+                        <p class="">{{ servico.Nome }}</p>
+                    </div>
+                    <div class="col-3" *ngIf="servico.Valor_recomendado">
+                        <p class="">R${{ servico.Valor_recomendado.toFixed(2)}}</p>
+                    </div>
+                    <div class="col-3" *ngIf="!servico.Valor_recomendado">
+                        <p class="">Não informado</p>
+                    </div>
+                    <div class="col-5" *ngIf="servico.Tempo_recomendado">
+                        <p class="">{{servico.Tempo_recomendado}}</p>
+                    </div>
+
+                    <div class="col-5" *ngIf="!servico.Tempo_recomendado">
+                        <p class="">Não Informado</p>
+                    </div>
+
+
+                    <div class="col-1">
+                        <button (click)="showCreateModal(servico.id)" class="btn btn-dark fa fa-pencil " style="border-radius: 0;"></button>
+                        <button (click)="deleteServico(servico)" class="btn btn-danger fa fa-trash " style="border-radius: 0; margin-left: .4em;"></button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" bsModal #servicoCreate="bs-modal" tabindex="-1" role="dialog" aria-labelledby="servicoCreate" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <servico-create #servicoCreateComponent aria-labelledby="servicoCreateComponent" [servicoToEdit]="servicoToEdit" [isEdit]="isEdit" (onEditServico)="editServico($event)" (onCreateServico)="createServico($event)" (onCloseModal)="servicoCreateModal.hide()"></servico-create>
+            </div>
+        </div>
+    </div>
+</div>
