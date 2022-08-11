@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +17,10 @@ import { UserCreateComponent } from './pages/user/user-create/user-create.compon
 import { NgxSelectModule, INgxSelectOptions } from 'ngx-select-ex';
 import { ServicoComponent } from './pages/servico/servico.component';
 import { ServicoCreateComponent } from './pages/servico/servico-create/servico-create.component';
+import { ClienteComponent } from './pages/cliente/cliente.component';
+import { ClienteCreateComponent } from './pages/cliente/cliente-create/cliente-create.component';
+import { AgendaCreateComponent } from './pages/agenda/agenda-create/agenda-create.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   optionValueField: 'id',
   optionTextField: 'Nome',
@@ -31,6 +36,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     UserCreateComponent,
     ServicoComponent,
     ServicoCreateComponent,
+    ClienteComponent,
+    ClienteCreateComponent,
+    AgendaCreateComponent,
   ],
   imports: [
     HttpClientModule,
@@ -41,7 +49,9 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgSelectModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

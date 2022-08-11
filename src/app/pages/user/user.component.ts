@@ -25,6 +25,7 @@ export class UserComponent implements OnInit {
     this.isLoading = true;
     this.loadUserTipos();
     this.loadUsers();
+
   }
   loadUsers() {
     this.userService.userList().subscribe(
@@ -127,7 +128,7 @@ export class UserComponent implements OnInit {
    
 
   showCreateModal(id){
-    if(id){
+    if(id){      
       Object.assign(this.userToEdit,this.users.find(r=>{ return r.id==id}))
       this.isEdit=true;
       this.userCreateComponent.setFormToEdit();

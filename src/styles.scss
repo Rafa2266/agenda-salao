@@ -1,6 +1,7 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import'font-awesome-4.7.0/css/font-awesome.min.css';
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import "~@ng-select/ng-select/themes/default.theme.css";
 .loading {
     opacity: 0.5;
 }
@@ -10,6 +11,10 @@ input.ng-invalid {
 }
 
 select.ng-invalid {
+    border: 1px solid red;
+}
+
+ng-select.ng-invalid {
     border: 1px solid red;
 }
 
