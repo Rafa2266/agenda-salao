@@ -3,12 +3,33 @@
     justify-content: right;
 }
 
+.content-right {
+    display: flex;
+    justify-content: right;
+}
+
 .scrolling-wrapper {
     overflow-x: auto;
 }
 
+.scrolling-wrappeer-y {
+    overflow-y: auto;
+    height: 470px;
+}
+
+.scrolling-wrappeer-y::-webkit-scrollbar {
+    display: none;
+}
+
+.scrolling-wrappeer-y {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
 .livre {
-    color: white;
+    color: black;
     background-color: rgb(1, 255, 99);
 }
 

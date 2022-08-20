@@ -15,19 +15,29 @@ import { environment } from 'src/environments/environment';
         .post(`${this.API}create_marcacao`,array)
         .pipe();
     }
+    editMarcacao(array:Array<Marcacao>){
+      return this.http
+      .put(`${this.API}edit_marcacao`,array)
+      .pipe();
+    }
     last_marcacao(){
         return this.http
         .get(`${this.API}last_marcacao`)
         .pipe();
     }
-    marcacaoList(){
+    marcacaoList(id:number){
       return this.http
-      .get(`${this.API}list_marcacao`)
+      .get(`${this.API}list_marcacao/${id}`)
       .pipe();
     }
     agendaTypeList(){
       return this.http
       .get(`${this.API}list_tipo_marcacao`)
+      .pipe();
+    }
+    marcacaoDelete(marcacao:Marcacao){
+      return this.http
+      .put(`${this.API}delete_marcacao`,marcacao)
       .pipe();
     }
   }

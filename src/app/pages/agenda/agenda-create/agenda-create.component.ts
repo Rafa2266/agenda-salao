@@ -21,14 +21,18 @@ export class AgendaCreateComponent implements OnInit {
   @Input() last_ordem: number;
   @Input() userSelect: User;
   @Input() dataAtual: Date;
+  @Input() agendaList:Array<Marcacao>
+  agendaListToVerify:Array<Marcacao>
   @Input() servicos: Array<Servico>;
   @Input() clientes: Array<Cliente>;
-  @Input() ordem_de_servico: number;
+  ordem_de_servico: number;
   @Output() onCreateMarcacao = new EventEmitter<Array<Marcacao>>();
+  @Output() onEditMarcacao = new EventEmitter<Array<Marcacao>>();
   horaInicial: String;
   horaFinal: String;
   servicosSelect = new Array<Servico>();
   hasPause: boolean;
+  clienteIsNotRegister: boolean;
   createMarcacaoArray=new Array<Marcacao>();
   formAgenda: FormGroup;
   message: String;
@@ -40,6 +44,8 @@ export class AgendaCreateComponent implements OnInit {
   }
 
   setFormToCreate() {
+    this.agendaListToVerify=new Array<Marcacao>();
+    Object.assign(this.agendaListToVerify,this.agendaList)
     this.formAgenda = this.formBuilder.group({
       cliente: new FormControl(null, Validators.required),
       date: new FormControl(null, Validators.required),
@@ -48,8 +54,69 @@ export class AgendaCreateComponent implements OnInit {
       servicos: new FormControl(null, Validators.required),
       valor: new FormControl(null, Validators.required),
       hasPause: new FormControl(false),
+      clienteIsNotRegister: new FormControl(false),
     });
   }
+  setFormToEdit(marcacaoToEdit:Array<Marcacao>) {
+    this.agendaListToVerify=new Array<Marcacao>();
+    this.ordem_de_servico=marcacaoToEdit[0].Ordem_de_servico
+    Object.assign(this.agendaListToVerify,this.agendaList)
+    let servicos=(marcacaoToEdit[0].Servico_ids.split(',')).map(r=>Number(r))
+    this.agendaListToVerify=this.agendaListToVerify.filter(r=>r.Ordem_de_servico!=marcacaoToEdit[0].Ordem_de_servico)
+    this.clienteIsNotRegister=!!marcacaoToEdit[0].Cliente_nome
+    this.formAgenda = this.formBuilder.group({
+      cliente: new FormControl(this.clienteIsNotRegister?marcacaoToEdit[0].Cliente_nome:marcacaoToEdit[0].Cliente_id, Validators.required),
+      date: new FormControl(marcacaoToEdit[0].Date, Validators.required),
+      hora_inicio: new FormControl(marcacaoToEdit[0].Hora_inicio, Validators.required),
+      hora_fim: new FormControl(marcacaoToEdit[marcacaoToEdit.length-1].Hora_fim, Validators.required),
+      servicos: new FormControl(servicos, Validators.required),
+      valor: new FormControl(marcacaoToEdit[0].Valor, Validators.required),
+      hasPause: new FormControl(marcacaoToEdit.length>1),
+      clienteIsNotRegister: new FormControl(!!marcacaoToEdit[0].Cliente_nome),
+    });
+    this.hasPause=marcacaoToEdit.length>1
+    this.horaFinal=marcacaoToEdit[marcacaoToEdit.length-1].Hora_fim
+    this.horaInicial=marcacaoToEdit[0].Hora_inicio;
+    this.changeValue(servicos)
+    let arrayMarcacaoPause=marcacaoToEdit.filter(r=>r.Tipo_marcacao_id==1)
+    arrayMarcacaoPause.forEach((r,i)=>{
+      this.formAgenda.addControl('hora_ini_pausa_' + (i+1),new FormControl(r.Hora_inicio, Validators.required));
+      this.formAgenda.addControl('hora_fim_pausa_' + (i+1),new FormControl(r.Hora_fim, Validators.required));
+      this.pauses.push(i+1);
+    })
+  }
+  verifyConflitoAgenda(array:Array<Marcacao>){
+    let agendaDay=this.agendaListToVerify.filter(r=>r.Date==array[0].Date)
+    let hourBegin=(new Date('2022-01-01 9:00')).getTime()
+    let hourEnd=(new Date('2022-01-01 19:00')).getTime()
+    for(let a=0;a<array.length;a++){
+      let hourInicio=(new Date('2022-01-01 '+array[a].Hora_inicio)).getTime()
+      let hourFim=(new Date('2022-01-01 '+array[a].Hora_fim)).getTime()
+      if(hourBegin>hourInicio || hourInicio>=hourEnd ){
+        this.message='Hora marcada fora do horário de funcionamento'
+        return false;
+      }
+      let marcaErro=agendaDay.find(r=>{
+        let hourInicioList=(new Date('2022-01-01 '+r.Hora_inicio)).getTime()
+        let hourFimList=(new Date('2022-01-01 '+r.Hora_fim)).getTime()
+
+        return (((hourInicio>=hourInicioList && hourFimList>hourInicio)||
+               (hourInicio<hourInicioList && hourFim>hourInicioList))) &&
+                (r.Tipo_marcacao_id!=1 && array[a].Tipo_marcacao_id!=1)
+      })
+      if(marcaErro){
+        this.message='Este funcionário já possui outra marcação nesse horário'
+        return false;
+      }
+    }
+    return true;
+  }
+
+  changeCheckboxCliente(value) {
+    this.clienteIsNotRegister=value;
+    this.formAgenda.patchValue({cliente:null})
+  }
+
   changeCheckbox(value) {
     this.hasPause = value;
     if (this.hasPause) {
@@ -172,14 +239,19 @@ export class AgendaCreateComponent implements OnInit {
   }
   createMarcacao() {
     if (this.formAgenda.valid) {
-      if( (new Date(this.formAgenda.controls['date'].value))>=(new Date())){
+      if( (new Date(this.formAgenda.controls['date'].value+' 23:59'))>=(new Date())){
         if(this.verifyHour()){
           this.createMarcacaoArray=new Array<Marcacao>();
           let marcacaoModel=new Marcacao();
-          marcacaoModel.Cliente_id=parseInt(this.formAgenda.value.cliente)
-          marcacaoModel.Cliente_nome=''
+          if(this.clienteIsNotRegister){
+            marcacaoModel.Cliente_nome=this.formAgenda.value.cliente
+            marcacaoModel.Cliente_id=null;
+          }else{
+            marcacaoModel.Cliente_id=parseInt(this.formAgenda.value.cliente)
+            marcacaoModel.Cliente_nome=''
+          }
           marcacaoModel.Date=this.formAgenda.value.date
-          marcacaoModel.Ordem_de_servico=this.last_ordem+1
+          marcacaoModel.Ordem_de_servico=this.isEdit?this.ordem_de_servico:this.last_ordem+1
           marcacaoModel.Valor=this.formAgenda.value.valor
           marcacaoModel.Servico_ids=this.formAgenda.value.servicos.toString()
           marcacaoModel.Usuario_id=this.userSelect.id
@@ -214,8 +286,15 @@ export class AgendaCreateComponent implements OnInit {
              marcacaoModel.Hora_fim=this.formAgenda.value.hora_fim
              this.createMarcacaoArray.push(marcacaoModel)
           }
-          this.onCreateMarcacao.emit(this.createMarcacaoArray)
-          this.closeModal()
+          if(this.verifyConflitoAgenda(this.createMarcacaoArray)){
+            if(this.isEdit){
+              this.onEditMarcacao.emit(this.createMarcacaoArray)
+            }else{
+              this.onCreateMarcacao.emit(this.createMarcacaoArray)
+            }
+            this.closeModal()
+          }
+          
         }
       }else{
         this.message = 'A data não pode ser menor que a data atual';
@@ -225,10 +304,12 @@ export class AgendaCreateComponent implements OnInit {
   editMarcacao() { }
   closeModal() {
     this.hasPause=false;
+    this.clienteIsNotRegister= false;
     this.horaInicial=null;
     this.horaFinal=null;
     this.servicosSelect = new Array<Servico>();
     this.hasPause=false;
+    this.message='';
     this.pauses = new Array<number>();
     this.formAgenda.reset();
     this.onCloseModal.emit();

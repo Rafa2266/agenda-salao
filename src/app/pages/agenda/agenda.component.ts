@@ -9,8 +9,9 @@ import { Cliente } from './../../models/Cliente';
 import { AgendaCreateComponent } from './agenda-create/agenda-create.component';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UserService } from './../../services/UserService.service';
-import { User, UserTipo } from './../../models/User';
+import { User} from './../../models/User';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 
 @Component({
   selector: 'app-agenda',
@@ -19,7 +20,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 export class AgendaComponent implements OnInit {
   isLoading = false;
-  isEdit=false;
+  isEdit:boolean;
   last_ordem:number
   tipos_marcacao=new Array<Tipo_marcacao>();
   agendaList=new Array<Marcacao>()
@@ -29,15 +30,16 @@ export class AgendaComponent implements OnInit {
   dias_select=new Array<any>();
   userSelect=new User();
   users = new Array<User>();
+  userAtual:User
   clientes = new Array<Cliente>();
   servicos=new Array<Servico>();
   formDateUser:FormGroup
-  ordem_de_servico:number;
   @ViewChild("agendaCreate") agendaCreateModal: ModalDirective;
   @ViewChild("agendaCreateComponent") agendaCreateComponent: AgendaCreateComponent;
 
   
   constructor(private userService:UserService,
+    private session:LocalStorageService,
     private clienteService:ClienteService,
     private servicoService:ServicoService,
     private agendaService:AgendaService,
@@ -46,11 +48,9 @@ export class AgendaComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading=true;
-    this.setFormDateUser()  
     this.loadUsers()
     this.loadClientes()
     this.loadServicos() 
-    this.loadAgenda()   
   }
   selectDays(date2:any){
     let date=new Date(date2)
@@ -64,24 +64,103 @@ export class AgendaComponent implements OnInit {
       this.dias_select.push({date:new Date(date_next),semana:this.dias_semana[date_next.getDay()]})
     }
   }
-  setFormDateUser(){
+  setFormDateUser(id:number){
     let data=`${this.dataAtual.getFullYear()}-${(this.dataAtual.getMonth()+1)<10?'0'+(this.dataAtual.getMonth()+1):this.dataAtual.getMonth()+1}-${this.dataAtual.getDate()<10?'0'+this.dataAtual.getDate():this.dataAtual.getDate()}`
     this.selectDays(data);
     this.formDateUser=this.formBuilder.group({
       date: new FormControl(data,Validators.required),
-      user: new FormControl(4,Validators.required)
+      user: new FormControl(id,Validators.required)
     })
   }
   loadServicesDay(date:Date){
-    let array=this.agendaList.filter(r=>{
+    let array=new Array<Marcacao>()
+    Object.assign(array,this.agendaList)
+    array=array.filter(r=>{
       let dta=new Date(r.Date);
       dta.setDate(dta.getDate()+1)
       return date.getTime()==dta.getTime()
     })
+    function compararHora(a:Marcacao,b:Marcacao){
+      if(new Date('2022-01-01 '+a.Hora_fim)>new Date('2022-01-01 '+b.Hora_fim)){
+        return 1;
+      }else{
+        return -1;
+      }
+    }
+    array=array.sort(compararHora);
+    let arrayPausa=new Array<Marcacao>();
+      for(let i=0;i<array.length-1;i++){
+      let hourInicio=new Date('2022-01-01 '+array[i].Hora_inicio)
+      let hourFim=new Date('2022-01-01 '+array[i].Hora_fim)
+      let hourInicioNext=new Date('2022-01-01 '+array[i+1].Hora_inicio)
+      let hourFimNext=new Date('2022-01-01 '+array[i+1].Hora_fim)
+       if((hourInicio.getTime()>=hourInicioNext.getTime() && hourFimNext.getTime()<hourInicio.getTime())||
+      (hourInicio.getTime()<hourInicioNext.getTime() && hourFim.getTime()>=hourInicioNext.getTime())){
+       if(array[i].Tipo_marcacao_id==1){
+          arrayPausa.push(array[i])
+        }else if(array[i+1].Tipo_marcacao_id==1){
+          arrayPausa.push(array[i+1])
+        }
+      }  
+    }  
+    array=array.filter(r=>!arrayPausa.includes(r))
+    
+    let arrayLivre=new Array<Marcacao>();
+    for(let i=0;i<array.length;i++){
+      if(i==0 && new Date('2022-01-01 '+array[i].Hora_inicio)>new Date('2022-01-01 9:00')){
+          let tempo_livre=new Marcacao();
+          tempo_livre.Hora_inicio='9:00'
+          tempo_livre.Hora_fim=array[i].Hora_inicio
+          tempo_livre.Tipo_marcacao_id=4;
+          arrayLivre.push(tempo_livre)
+      }
+      if(i<array.length-1){
+        if(array[i].Hora_fim!=array[i+1].Hora_inicio){
+          let tempo_livre=new Marcacao();
+          tempo_livre.Hora_inicio=array[i].Hora_fim
+          tempo_livre.Hora_fim=array[i+1].Hora_inicio
+          let hourInicio=new Date('2022-01-01 '+tempo_livre.Hora_inicio)
+          let hourFim=new Date('2022-01-01 '+tempo_livre.Hora_fim)
+          let pausa=arrayPausa.find(r=>{
+            let hourInicioPausa=new Date('2022-01-01 '+r.Hora_inicio)
+            let hourFimPausa=new Date('2022-01-01 '+r.Hora_fim)
+            return hourInicio.getTime()>=hourInicioPausa.getTime() && hourFim.getTime()<=hourFimPausa.getTime()
+          })
+          if(pausa){
+            tempo_livre.Cliente_id=pausa.Cliente_id
+            tempo_livre.Servico_ids=pausa.Servico_ids
+            tempo_livre.Ordem_de_servico=pausa.Ordem_de_servico
+            tempo_livre.Valor=pausa.Valor
+            tempo_livre.Tipo_marcacao_id=1;
+          }else{
+            tempo_livre.Tipo_marcacao_id=4;  
+          }
+          arrayLivre.push(tempo_livre)
+        }
+      
+      }else{
+        if(new Date('2022-01-01 '+array[i].Hora_fim)<new Date('2022-01-01 19:00')){
+          let tempo_livre=new Marcacao();
+          tempo_livre.Hora_inicio=array[i].Hora_fim;
+          tempo_livre.Hora_fim='19:00'
+          tempo_livre.Tipo_marcacao_id=4;
+          arrayLivre.push(tempo_livre)
+        }
+      }
+    }
+    array=array.concat(arrayLivre);
+    array=array.sort(compararHora) 
     return array
   }
-  loadAgenda(){
-    this.agendaService.marcacaoList().subscribe(response=>{
+  showInfoService(service:Marcacao){
+    if(service.Tipo_marcacao_id!=1){
+      service.dropIsActive= !service.dropIsActive
+    }
+  }
+  loadAgenda(id:number){
+    
+    this.agendaService.marcacaoList(id).subscribe(response=>{
+        this.agendaList=new Array<Marcacao>();
         this.isLoading = false;
         Object.assign(this.agendaList,response)
     }, (error) => {
@@ -110,7 +189,14 @@ export class AgendaComponent implements OnInit {
       (response) => {
         Object.assign(this.users, response);
         this.users=this.users.filter(r=>r.id_tipo==2 ||r.id_tipo==4)
-        this.changeUser(this.users[0].id)
+        let user:User =this.session.get('user')
+        this.userAtual=user
+        let id=this.users.find(r=>r.id_tipo==2).id
+        if(this.users.find(r=>r.id==user.id)){
+          id=user.id
+        }
+        this.setFormDateUser(id)  
+        this.changeUser(id)
       },
       (error) => {
         this.isLoading = false;
@@ -142,6 +228,7 @@ export class AgendaComponent implements OnInit {
   }
   changeUser(idUser:number){
     this.userSelect=this.users.find(r=>r.id==idUser)
+    this.loadAgenda(idUser)
   }
   showTipoMarcacao(id:number){
     let tipo=this.tipos_marcacao.find(r=>r.id==id)
@@ -165,15 +252,47 @@ export class AgendaComponent implements OnInit {
     })
     return servicosString.toString()
   }
-  
+  deleteMarcacao(marcacao:Marcacao){
+    Swal.fire({ 
+     //'warning',
+     title:"Tem certeza?",
+     text:`Você está prestes a deletar a marcação ${marcacao.Ordem_de_servico} da agenda`,
+     showCancelButton: true,
+    }).then(result=>{
+      if(result.value){
+        this.isLoading=true;
+        this.agendaService.marcacaoDelete(marcacao).subscribe(rsponse=>{
+         this.isLoading=false;
+         Swal.fire(
+           "Success",
+           "Marcação na agenda deletada com sucesso",
+           "success"
+         );
+         this.agendaList=this.agendaList.filter(r=>r.Ordem_de_servico!=marcacao.Ordem_de_servico)
+        })
+        
+      }
+    },err=>{
+     this.isLoading=false;
+     Swal.fire(
+       "Error",
+       "Alguma coisa deu errado deletando a marcação na agenda",
+       "error"
+     );
+    })
+ 
+   }
   createMarcacao(array:Array<Marcacao>){
     this.agendaService.agendaCreate(array).subscribe((res:Array<Marcacao>)=>{
+      this.isLoading=false;
       Swal.fire(
         "Success",
         "Marcação #" + res[0].Ordem_de_servico + " criada com sucesso",
         "success"
       );
-      this.loadUsers();
+      array.forEach(r=>{
+        this.agendaList.push(r)
+      })
      },err=>{
       this.isLoading=false;
       Swal.fire(
@@ -183,16 +302,37 @@ export class AgendaComponent implements OnInit {
       );
      })
   }
-  showCreateModal(id){
-    if(id){      
-    /*   Object.assign(this.userToEdit,this.users.find(r=>{ return r.id==id}))
+
+  editMarcacao(array:Array<Marcacao>){
+    this.agendaService.editMarcacao(array).subscribe(response=>{
+      this.isLoading=false;
+      Swal.fire(
+        "Success",
+        "Marcação #" + response[0].Ordem_de_servico + " editada com sucesso",
+        "success"
+      );
+      this.agendaList=this.agendaList.filter(r=>r.Ordem_de_servico!=response[0].Ordem_de_servico)
+      array.forEach(r=>{
+        this.agendaList.push(r)
+      })
+     },err=>{
+      this.isLoading=false;
+      Swal.fire(
+        "Error",
+        "Alguma coisa deu errado salvando a marcação",
+        "error"
+      );
+     })
+  }
+  showCreateModal(ordem){
+    if(ordem){ 
       this.isEdit=true;
-      this.userCreateComponent.setFormToEdit(); */
+      let marcacaoToEdit=this.agendaList.filter(r=> r.Ordem_de_servico==ordem)
+      this.agendaCreateComponent.setFormToEdit(marcacaoToEdit); 
     }else{
       this.isEdit=false;
       this.loadLastMarcacao();
       this.agendaCreateComponent.setFormToCreate();
-
     }
     this.agendaCreateModal.show();
     this.agendaCreateModal.config.ignoreBackdropClick=true;

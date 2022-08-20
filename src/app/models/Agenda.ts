@@ -12,7 +12,7 @@ export class Marcacao{
     Ordem_de_servico:number
     createdAt:Date
     updateAt:Date
-    dropIsActive:boolean
+    dropIsActive=false;
 }
 export class Tipo_marcacao{
     id:number;

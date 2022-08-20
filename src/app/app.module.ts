@@ -21,6 +21,7 @@ import { ClienteComponent } from './pages/cliente/cliente.component';
 import { ClienteCreateComponent } from './pages/cliente/cliente-create/cliente-create.component';
 import { AgendaCreateComponent } from './pages/agenda/agenda-create/agenda-create.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AgendaIntervaloComponent } from './pages/agenda/agenda-intervalo/agenda-intervalo.component';
 const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more options
   optionValueField: 'id',
   optionTextField: 'Nome',
@@ -39,6 +40,7 @@ const CustomSelectOptions: INgxSelectOptions = { // Check the interface for more
     ClienteComponent,
     ClienteCreateComponent,
     AgendaCreateComponent,
+    AgendaIntervaloComponent,
   ],
   imports: [
     HttpClientModule,
