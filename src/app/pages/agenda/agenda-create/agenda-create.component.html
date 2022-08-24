@@ -10,7 +10,7 @@
     <p *ngIf="message" class="h5 btn-danger p-3 text-center">{{message}}</p>
     <form [formGroup]="formAgenda" class=" form-row row">
         <div class="col-5 pb-3">
-            <label class="h4 text-bold">User</label>
+            <label class="h4 text-bold">Funcionário</label>
             <p class="form-control">{{userSelect.Nome}}</p>
         </div>
         <div class="col-5 pb-3" *ngIf="clienteIsNotRegister">
@@ -24,7 +24,7 @@
             </ng-select>
         </div>
         <div class="col-2 pb-3 ">
-            <label class=" text-bold pr-3 mr-4">Clinte não registrado ?</label>
+            <label class=" text-bold pr-3 mr-4">Clinte não registrado </label>
             <input class="p-2" style='margin-left: 0.2em;' (change)="changeCheckboxCliente($event.currentTarget.checked)" formControlName="clienteIsNotRegister" type="checkbox" />
         </div>
         <div class="col-8 pb-3">
@@ -38,7 +38,7 @@
             <input formControlName="valor" class="form-control " type="number " />
         </div>
         <div class="col-4 pb-3">
-            <label class="h4 text-bold">Date</label>
+            <label class="h4 text-bold">Data</label>
             <input class="form-control" formControlName="date" min="{{dataAtual}}" type="date" />
         </div>
         <div class="col-4 pb-3">
@@ -50,7 +50,7 @@
             <input (change)="changeHourFim($event.target.value)" class="form-control" formControlName="hora_fim" min="09:00" type="time" />
         </div>
         <div class="col-4 pb-3 ">
-            <label class=" text-bold pr-3 mr-4">Tem pausa ?</label>
+            <label class=" text-bold pr-3 mr-4">Tem pausa </label>
             <input class="p-2" style='margin-left: 0.2em;' (change)="changeCheckbox($event.currentTarget.checked)" formControlName="hasPause" type="checkbox" />
         </div>
         <div class="col-12 row">

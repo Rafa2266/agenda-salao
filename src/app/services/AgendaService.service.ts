@@ -40,4 +40,14 @@ import { environment } from 'src/environments/environment';
       .put(`${this.API}delete_marcacao`,marcacao)
       .pipe();
     }
+    intervaloDelete(marcacao:Marcacao){
+      return this.http
+      .put(`${this.API}delete_intervalo`,marcacao)
+      .pipe();
+    }
+    intervaloEdit(marcacao:Marcacao){
+      return this.http
+      .put(`${this.API}edit_intervalo`,marcacao)
+      .pipe();
+    }
   }

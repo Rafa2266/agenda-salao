@@ -1,3 +1,4 @@
+import { AgendaIntervaloComponent } from './agenda-intervalo/agenda-intervalo.component';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'
 import { AgendaService } from './../../services/AgendaService.service';
@@ -21,6 +22,7 @@ import { LocalStorageService } from 'src/app/services/local-storage.service';
 export class AgendaComponent implements OnInit {
   isLoading = false;
   isEdit:boolean;
+  isEditIntervalo:boolean;
   last_ordem:number
   tipos_marcacao=new Array<Tipo_marcacao>();
   agendaList=new Array<Marcacao>()
@@ -36,6 +38,8 @@ export class AgendaComponent implements OnInit {
   formDateUser:FormGroup
   @ViewChild("agendaCreate") agendaCreateModal: ModalDirective;
   @ViewChild("agendaCreateComponent") agendaCreateComponent: AgendaCreateComponent;
+  @ViewChild("agendaIntervalo") agendaIntervaloModal: ModalDirective;
+  @ViewChild("agendaIntervaloComponent") agendaIntervaloComponent: AgendaIntervaloComponent;
 
   
   constructor(private userService:UserService,
@@ -149,7 +153,14 @@ export class AgendaComponent implements OnInit {
       }
     }
     array=array.concat(arrayLivre);
-    array=array.sort(compararHora) 
+    array=array.sort(compararHora)
+    if(array.length<=0){
+      let tempo_livre=new Marcacao();
+      tempo_livre.Hora_inicio='9:00';
+      tempo_livre.Hora_fim='19:00'
+      tempo_livre.Tipo_marcacao_id=4;
+      array.push(tempo_livre)
+    }
     return array
   }
   showInfoService(service:Marcacao){
@@ -253,23 +264,45 @@ export class AgendaComponent implements OnInit {
     return servicosString.toString()
   }
   deleteMarcacao(marcacao:Marcacao){
+    let message;
+    if(marcacao.Ordem_de_servico){
+      message=`Você está prestes a deletar a marcação ${marcacao.Ordem_de_servico} da agenda`;
+    }else{
+      let date=new Date(marcacao.Date)
+      date.setDate(date.getDate()+1)
+      let dateFormat=`${date.getDate()<10?'0'+date.getDate():date.getDate()}/${(date.getMonth()+1)<10?'0'+(date.getMonth()+1):date.getMonth()+1}/${date.getFullYear()}`
+      message=`Você está prestes a deletar um intervalo do dia ${dateFormat} das ${marcacao.Hora_inicio} até as ${marcacao.Hora_fim} na agenda`;
+    }
     Swal.fire({ 
      //'warning',
      title:"Tem certeza?",
-     text:`Você está prestes a deletar a marcação ${marcacao.Ordem_de_servico} da agenda`,
+     text:message,
      showCancelButton: true,
     }).then(result=>{
       if(result.value){
         this.isLoading=true;
-        this.agendaService.marcacaoDelete(marcacao).subscribe(rsponse=>{
-         this.isLoading=false;
-         Swal.fire(
-           "Success",
-           "Marcação na agenda deletada com sucesso",
-           "success"
-         );
-         this.agendaList=this.agendaList.filter(r=>r.Ordem_de_servico!=marcacao.Ordem_de_servico)
-        })
+        if(marcacao.Ordem_de_servico!=null){
+          this.agendaService.marcacaoDelete(marcacao).subscribe(response=>{
+                  this.isLoading=false;
+                  Swal.fire(
+                    "Success",
+                    "Marcação na agenda deletada com sucesso",
+                    "success"
+                  );
+                  this.agendaList=this.agendaList.filter(r=>r.Ordem_de_servico!=marcacao.Ordem_de_servico)
+                  });
+        }else{
+          this.agendaService.intervaloDelete(marcacao).subscribe(response=>{
+            this.isLoading=false;
+            Swal.fire(
+              "Success",
+              "Intervalo na agenda deletada com sucesso",
+              "success"
+            );
+            this.agendaList=this.agendaList.filter(r=>r.id!=marcacao.id)
+            });
+        }
+        
         
       }
     },err=>{
@@ -283,26 +316,63 @@ export class AgendaComponent implements OnInit {
  
    }
   createMarcacao(array:Array<Marcacao>){
+    this.isLoading=true;
     this.agendaService.agendaCreate(array).subscribe((res:Array<Marcacao>)=>{
       this.isLoading=false;
-      Swal.fire(
-        "Success",
-        "Marcação #" + res[0].Ordem_de_servico + " criada com sucesso",
-        "success"
-      );
-      array.forEach(r=>{
-        this.agendaList.push(r)
-      })
+      if(res[0].Ordem_de_servico!=2){
+        Swal.fire(
+          "Success",
+          "Marcação #" + res[0].Ordem_de_servico + " criada com sucesso",
+          "success"
+        );
+      }else{
+        Swal.fire(
+          "Success",
+          "Intervalos criados com sucesso",
+          "success"
+        );
+      }
+      if(res[0].Ordem_de_servico){
+        array.forEach(r=>{
+          this.agendaList.push(r)
+        })
+      }else{
+        this.loadAgenda(this.userSelect.id)
+      }
+      
      },err=>{
       this.isLoading=false;
       Swal.fire(
         "Error",
-        "Alguma coisa deu errado salvando a marcação",
+        "Alguma coisa deu errado salvando a marcação ou intervalo",
         "error"
       );
      })
   }
-
+  editIntervalo(marcacao:Marcacao){
+    this.isLoading=true;
+    let date=new Date(marcacao.Date)
+    date.setDate(date.getDate()+1)
+    let dateFormat=`${date.getDate()<10?'0'+date.getDate():date.getDate()}/${(date.getMonth()+1)<10?'0'+(date.getMonth()+1):date.getMonth()+1}/${date.getFullYear()}`
+    let message=`Intervalo do dia ${dateFormat} das ${marcacao.Hora_inicio} até as ${marcacao.Hora_fim} editado com sucesso`;
+    this.agendaService.intervaloEdit(marcacao).subscribe((response:Marcacao)=>{
+      this.isLoading=false;
+      Swal.fire(
+        "Success",
+        message,
+        "success"
+      );
+      this.agendaList=this.agendaList.filter(r=>r.id!=response.id)
+      this.agendaList.push(response)
+    },err=>{
+      this.isLoading=false;
+      Swal.fire(
+        "Error",
+        "Alguma coisa deu errado salvando o intervalo",
+        "error"
+      );
+     })
+  }
   editMarcacao(array:Array<Marcacao>){
     this.agendaService.editMarcacao(array).subscribe(response=>{
       this.isLoading=false;
@@ -336,6 +406,19 @@ export class AgendaComponent implements OnInit {
     }
     this.agendaCreateModal.show();
     this.agendaCreateModal.config.ignoreBackdropClick=true;
+  }
+
+  showIntervaloModal(id){
+    if(id){ 
+      this.isEditIntervalo=true;
+      let marcacaoToEdit=this.agendaList.find(r=> r.id==id)
+      this.agendaIntervaloComponent.setFormToEdit(marcacaoToEdit); 
+    }else{
+      this.isEditIntervalo=false;
+      this.agendaIntervaloComponent.setFormToCreate();
+    }
+    this.agendaIntervaloModal.show();
+    this.agendaIntervaloModal.config.ignoreBackdropClick=true;
   }
 
 }

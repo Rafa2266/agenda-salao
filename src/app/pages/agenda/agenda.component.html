@@ -14,7 +14,7 @@
             </div>
         </form>
         <div *ngIf="userAtual?4>userAtual.id_tipo:false" class="col-4" id="addUser">
-            <button class="btn btn-danger" (click)="showCreateModal(null)">
+            <button class="btn btn-danger" (click)="showIntervaloModal(null)">
                 Adicionar intervalo<span style='margin-left: 0.2em;'class=" fa fa-plus"></span>
              </button>
             <button class="btn btn-dark" style='margin-left: 0.5em;' (click)="showCreateModal(null)">
@@ -31,15 +31,17 @@
             <div class="card-body scrolling-wrappeer-y">
                 <div class="card" *ngFor="let service of loadServicesDay(dia.date)">
                     <div class="card-header row " [ngClass]="{'livre': service.Tipo_marcacao_id==4,
-                    'servico': service.Tipo_marcacao_id==0 || service.Tipo_marcacao_id==3,'pausa': service.Tipo_marcacao_id==1}">
-                        <p class="col-6 mb-1"><b style="cursor:pointer;" (click)="showCreateModal(service.Ordem_de_servico)" *ngIf="service.Tipo_marcacao_id!=4 && 4>userAtual.id_tipo">#{{service.Ordem_de_servico}}</b><b *ngIf="userAtual.id_tipo>=4 && service.Tipo_marcacao_id!=4">#{{service.Ordem_de_servico}}</b></p>
+                    'servico': service.Tipo_marcacao_id==0 || service.Tipo_marcacao_id==3,'pausa': service.Tipo_marcacao_id==1,'intervalo': service.Tipo_marcacao_id==2}">
+                        <p class="col-6 mb-1"><b style="cursor:pointer;" (click)="showCreateModal(service.Ordem_de_servico)" *ngIf="service.Tipo_marcacao_id!=4 && service.Tipo_marcacao_id!=2 && 4>userAtual.id_tipo">#{{service.Ordem_de_servico}}</b><b *ngIf="userAtual.id_tipo>=4 && service.Tipo_marcacao_id!=4 && service.Tipo_marcacao_id!=2">#{{service.Ordem_de_servico}}</b></p>
                         <div class="col-6 mb-1 content-right"><span *ngIf="service.Tipo_marcacao_id!=4 && service.Tipo_marcacao_id!=1 && 4>userAtual.id_tipo" (click)="deleteMarcacao(service)" style="cursor:pointer;font-size:1.4em;margin-top:0.2em;" class="fa fa-trash"></span></div>
-                        <p class="col-6 mb-1">{{service.Hora_inicio}}-{{service.Hora_fim}}</p>
-                        <p class="col-6 mb-1">{{showTipoMarcacao(service.Tipo_marcacao_id)}}</p>
-                        <p *ngIf="service.Tipo_marcacao_id!=4" class="col-10 mb-1">{{showCliente(service.Cliente_id,service.Cliente_nome)}}</p>
-                        <div *ngIf="service.Tipo_marcacao_id!=4 && service.Tipo_marcacao_id!=1" (click)="showInfoService(service)" class="col-2 mb-1 content-right" style="cursor:pointer;font-size:1.8em;"><span [ngClass]="{'fa-angle-down': service.dropIsActive,'fa-angle-up ': !service.dropIsActive}" class="fa "></span></div>
+                        <p *ngIf="service.Tipo_marcacao_id!=2" class="col-6 mb-1">{{service.Hora_inicio}}-{{service.Hora_fim}}</p>
+                        <p *ngIf="service.Tipo_marcacao_id==2" (click)="showIntervaloModal(service.id)" style="cursor:pointer;" class="col-6 mb-1">{{service.Hora_inicio}}-{{service.Hora_fim}}</p>
+                        <p class="col-6 mb-1" *ngIf="service.Tipo_marcacao_id!=2">{{showTipoMarcacao(service.Tipo_marcacao_id)}}</p>
+                        <p class="col-6 mb-1" *ngIf="service.Tipo_marcacao_id==2" style="cursor:pointer;" (click)="showIntervaloModal(service.id)">{{showTipoMarcacao(service.Tipo_marcacao_id)}}</p>
+                        <p *ngIf="service.Tipo_marcacao_id!=4 && service.Tipo_marcacao_id!=2" class="col-10 mb-1">{{showCliente(service.Cliente_id,service.Cliente_nome)}}</p>
+                        <div *ngIf="service.Tipo_marcacao_id!=4 && service.Tipo_marcacao_id!=2 && service.Tipo_marcacao_id!=1" (click)="showInfoService(service)" class="col-2 mb-1 content-right" style="cursor:pointer;font-size:1.8em;"><span [ngClass]="{'fa-angle-down': service.dropIsActive,'fa-angle-up ': !service.dropIsActive}" class="fa "></span></div>
                     </div>
-                    <div class="card-body row" *ngIf="service.dropIsActive && service.Tipo_marcacao_id!=4 && service.Tipo_marcacao_id!=1">
+                    <div class="card-body row" *ngIf="service.dropIsActive && service.Tipo_marcacao_id!=4 && service.Tipo_marcacao_id!=2 && service.Tipo_marcacao_id!=1">
                         <div class="col-12">
                             <label class="h5 text-bold">Serviços</label>
                             <p>{{showServicos(service.Servico_ids)}}</p>
@@ -59,6 +61,14 @@
         <div class="modal-content">
             <agenda-create #agendaCreateComponent aria-labelledby="agendaCreateComponent" [agendaList]="agendaList" [servicos]="servicos" [last_ordem]="last_ordem" [dataAtual]="dataAtual" [clientes]="clientes" [userSelect]="userSelect" [isEdit]="isEdit" (onCreateMarcacao)="createMarcacao($event)"
                 (onEditMarcacao)="editMarcacao($event)" (onCloseModal)="agendaCreateModal.hide()"></agenda-create>
+        </div>
+    </div>
+</div>
+<div class="modal fade" bsModal #agendaIntervalo="bs-modal" tabindex="-1" role="dialog" aria-labelledby="agendaIntervalo" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <agenda-intervalo #agendaIntervaloComponent aria-labelledby="agendaIntervaloComponent" [isEdit]="isEditIntervalo" [agendaList]="agendaList" [userSelect]="userSelect" (onCloseModal)="agendaIntervaloModal.hide()" (onEditIntervalo)="editIntervalo($event)"
+                (onCreateIntervalo)="createMarcacao($event)"></agenda-intervalo>
         </div>
     </div>
 </div>

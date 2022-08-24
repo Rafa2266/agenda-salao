@@ -105,7 +105,7 @@ export class AgendaCreateComponent implements OnInit {
                 (r.Tipo_marcacao_id!=1 && array[a].Tipo_marcacao_id!=1)
       })
       if(marcaErro){
-        this.message='Este funcionário já possui outra marcação nesse horário'
+        this.message='Este funcionário já possui uma marcação ou intervalo nesse horário'
         return false;
       }
     }
@@ -239,7 +239,7 @@ export class AgendaCreateComponent implements OnInit {
   }
   createMarcacao() {
     if (this.formAgenda.valid) {
-      if( (new Date(this.formAgenda.controls['date'].value+' 23:59'))>=(new Date())){
+      //if( (new Date(this.formAgenda.controls['date'].value+' 23:59'))>=(new Date())){
         if(this.verifyHour()){
           this.createMarcacaoArray=new Array<Marcacao>();
           let marcacaoModel=new Marcacao();
@@ -296,12 +296,11 @@ export class AgendaCreateComponent implements OnInit {
           }
           
         }
-      }else{
+     /*  }else{
         this.message = 'A data não pode ser menor que a data atual';
-      }
+      } */
     }
   }
-  editMarcacao() { }
   closeModal() {
     this.hasPause=false;
     this.clienteIsNotRegister= false;

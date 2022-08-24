@@ -1,6 +1,6 @@
 export class Marcacao{
     id:number;
-    Date:Date
+    Date:any
     Hora_inicio:String
     Hora_fim:String
     Cliente_id:number

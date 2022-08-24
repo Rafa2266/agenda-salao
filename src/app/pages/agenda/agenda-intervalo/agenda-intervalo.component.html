@@ -1,1 +1,37 @@
-<p>agenda-intervalo works!</p>
+<div class="modal-header justify-content-between row pt-0">
+
+    <div class="col-12" (click)="closeModal()" style="cursor: pointer;display: flex;justify-content: right;font-size: 2em;">
+        <span aria-hidden="true">×</span>
+    </div>
+    <h3 *ngIf="!isEdit" class="modal-tilte align-self-center">Novo Intervalo</h3>
+    <h3 *ngIf="isEdit" class="modal-tilte align-self-center">Editando Intervalo do dia {{dateIntervalo | date: 'dd/MM/yyyy'}}</h3>
+</div>
+<div class="modal-body" style="background-color:rgb(218, 218, 218)">
+    <p *ngIf="message" class="h5 btn-danger p-3 text-center">{{message}}</p>
+    <form [formGroup]="formIntervalo" class=" form-row row">
+        <div class="col-7 pb-3">
+            <label class="h4 text-bold">Funcionário</label>
+            <p class="form-control">{{userSelect.Nome}}</p>
+        </div>
+        <div class="col-6 pb-3">
+            <label class="h4 text-bold">Hora do começo do intervalo</label>
+            <input class="form-control" formControlName="hora_inicio" type="time" />
+        </div>
+        <div class="col-6 pb-3">
+            <label class="h4 text-bold">Hora do final do intervalo</label>
+            <input class="form-control" formControlName="hora_fim" type="time" />
+        </div>
+        <div *ngIf="!isEdit" class="col-6 pb-3">
+            <label class="h4 text-bold">Marcar a partir do dia</label>
+            <input class="form-control" formControlName="date_ini" type="date" />
+        </div>
+        <div *ngIf="!isEdit" class="col-6 pb-3">
+            <label class="h4 text-bold">Até o dia</label>
+            <input class="form-control" formControlName="date_fim" type="date" />
+        </div>
+        <div class="container col-12 pb-4" style="display: flex;justify-content: center;">
+            <button *ngIf="!isEdit" class="btn btn-primary  mt-3 px-5 mb-0" (click)="createIntervalo()" [ngClass]="{'disabled': !formIntervalo.valid}" style="font-size:30px;" type="submit">Criar Intervalo</button>
+            <button *ngIf="isEdit" class="btn btn-primary  mt-3 px-5 mb-0" (click)="editIntervalo()" [ngClass]="{'disabled': !formIntervalo.valid}" style="font-size:30px;" type="submit">Editar Intervalo</button>
+        </div>
+    </form>
+</div>
