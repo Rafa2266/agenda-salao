@@ -170,10 +170,13 @@ export class AgendaComponent implements OnInit {
   }
   loadAgenda(id:number){
     
-    this.agendaService.marcacaoList(id).subscribe(response=>{
+    this.agendaService.marcacaoList(id).subscribe((response:Array<any>)=>{
         this.agendaList=new Array<Marcacao>();
         this.isLoading = false;
-        Object.assign(this.agendaList,response)
+        response.forEach(r=>{
+          r.Valor=parseFloat(r.Valor)
+          this.agendaList.push(r);
+        })
     }, (error) => {
       this.isLoading = false;
       console.log(error);
