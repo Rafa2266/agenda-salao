@@ -23,8 +23,8 @@
 
 
         <div class="container col-12 pb-4" style="display: flex;justify-content: center;">
-            <button *ngIf="!isEdit" class="btn btn-primary  mt-3 px-5 mb-0" (click)="createServico()" [ngClass]="{'disabled': !formServico.valid}" style="font-size:30px;" type="submit">Criar Usuário</button>
-            <button *ngIf="isEdit" class="btn btn-primary  mt-3 px-5 mb-0" (click)="editServico()" [ngClass]="{'disabled': !formServico.valid}" style="font-size:30px;" type="submit">Editar Usuário</button>
+            <button *ngIf="!isEdit" class="btn btn-primary  mt-3 px-5 mb-0" (click)="createServico()" [ngClass]="{'disabled': !formServico.valid}" style="font-size:30px;" type="submit">Criar Serviço</button>
+            <button *ngIf="isEdit" class="btn btn-primary  mt-3 px-5 mb-0" (click)="editServico()" [ngClass]="{'disabled': !formServico.valid}" style="font-size:30px;" type="submit">Editar Serviço</button>
         </div>
     </form>
 </div>

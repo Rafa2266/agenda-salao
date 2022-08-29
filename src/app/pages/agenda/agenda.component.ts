@@ -228,8 +228,12 @@ export class AgendaComponent implements OnInit {
   }
   loadServicos() {
     this.servicoService.servicoList().subscribe(
-      (response) => {
-        Object.assign(this.servicos, response);
+      (response:Array<any>) => {
+        this.servicos=new Array<Servico>()
+        response.forEach(r=>{
+          r.Valor_recomendado=parseFloat(r.Valor_recomendado)
+          this.servicos.push(r);
+        })
       },
       (error) => {
         this.isLoading = false;

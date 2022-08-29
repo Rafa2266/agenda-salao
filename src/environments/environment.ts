@@ -5,7 +5,7 @@
 export const environment = {
 
   production: false ,
-  API:'/api'
+  API:'https://agenda-salao-api.herokuapp.com'
 };
 
 /*

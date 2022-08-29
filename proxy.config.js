@@ -1,8 +1,8 @@
-const proxy = [{
+/* const proxy = [{
     context: ['/api'],
-    target: 'http://localhost:8080/',
+    target: 'https://agenda-salao-api.herokuapp.com/',
     secure: false,
     logLevel: false,
-    pathRewrite: { '^/api': '' }
+    //pathRewrite: { '^/api': '' }
 }];
-module.exports = proxy;
+module.exports = proxy; */

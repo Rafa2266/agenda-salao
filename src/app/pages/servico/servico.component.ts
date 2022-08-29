@@ -29,9 +29,13 @@ export class ServicoComponent implements OnInit {
 
   loadServicos() {
     this.servicoService.servicoList().subscribe(
-      (response) => {
+      (response:Array<any>) => {
         this.isLoading = false;
-        Object.assign(this.servicos, response);
+        this.servicos=new Array<Servico>()
+        response.forEach(r=>{
+          r.Valor_recomendado=parseFloat(r.Valor_recomendado)
+          this.servicos.push(r);
+        })
       },
       (error) => {
         this.isLoading = false;
