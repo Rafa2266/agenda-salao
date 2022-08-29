@@ -64,6 +64,7 @@ export class AgendaCreateComponent implements OnInit {
     let servicos=(marcacaoToEdit[0].Servico_ids.split(',')).map(r=>Number(r))
     this.agendaListToVerify=this.agendaListToVerify.filter(r=>r.Ordem_de_servico!=marcacaoToEdit[0].Ordem_de_servico)
     this.clienteIsNotRegister=!!marcacaoToEdit[0].Cliente_nome
+    this.changeValue(servicos)
     this.formAgenda = this.formBuilder.group({
       cliente: new FormControl(this.clienteIsNotRegister?marcacaoToEdit[0].Cliente_nome:marcacaoToEdit[0].Cliente_id, Validators.required),
       date: new FormControl(marcacaoToEdit[0].Date, Validators.required),
@@ -77,7 +78,6 @@ export class AgendaCreateComponent implements OnInit {
     this.hasPause=marcacaoToEdit.length>1
     this.horaFinal=marcacaoToEdit[marcacaoToEdit.length-1].Hora_fim
     this.horaInicial=marcacaoToEdit[0].Hora_inicio;
-    this.changeValue(servicos)
     let arrayMarcacaoPause=marcacaoToEdit.filter(r=>r.Tipo_marcacao_id==1)
     arrayMarcacaoPause.forEach((r,i)=>{
       this.formAgenda.addControl('hora_ini_pausa_' + (i+1),new FormControl(r.Hora_inicio, Validators.required));
