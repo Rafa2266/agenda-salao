@@ -339,13 +339,13 @@ export class AgendaComponent implements OnInit {
           "success"
         );
       }
-      if(res[0].Ordem_de_servico){
+     /*  if(res[0].Ordem_de_servico){
         array.forEach(r=>{
           this.agendaList.push(r)
         })
-      }else{
+      }else{ */
         this.loadAgenda(this.userSelect.id)
-      }
+     // }
       
      },err=>{
       this.isLoading=false;
@@ -388,10 +388,11 @@ export class AgendaComponent implements OnInit {
         "Marcação #" + response[0].Ordem_de_servico + " editada com sucesso",
         "success"
       );
-      this.agendaList=this.agendaList.filter(r=>r.Ordem_de_servico!=response[0].Ordem_de_servico)
+    /*   this.agendaList=this.agendaList.filter(r=>r.Ordem_de_servico!=response[0].Ordem_de_servico)
       array.forEach(r=>{
         this.agendaList.push(r)
-      })
+      }) */
+      this.loadAgenda(this.userSelect.id)
      },err=>{
       this.isLoading=false;
       Swal.fire(
