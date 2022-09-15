@@ -9,47 +9,47 @@
 <div class="modal-body " style="background-color:rgb(218, 218, 218)">
     <p *ngIf="message" class="h5 btn-danger p-3 text-center">{{message}}</p>
     <form [formGroup]="formAgenda" class=" form-row row">
-        <div class="col-5 pb-3">
+        <div class="col-12 col-md-12 col-xl-5 pb-3">
             <label class="h4 text-bold">Funcionário</label>
             <p class="form-control">{{userSelect.Nome}}</p>
         </div>
-        <div class="col-5 pb-3" *ngIf="clienteIsNotRegister">
+        <div class="col-12 col-md-9 col-xl-5 pb-3" *ngIf="clienteIsNotRegister">
             <label class="h4 text-bold">Cliente</label>
             <input class="form-control" type="text" formControlName="cliente" />
         </div>
-        <div class="col-5 pb-3" *ngIf="!clienteIsNotRegister">
+        <div class="col-12 col-md-9 col-xl-5 pb-3" *ngIf="!clienteIsNotRegister">
             <label class="h4 text-bold">Cliente</label>
             <ng-select class="p-2 form-control" formControlName="cliente" style="border-radius: 5px;">
                 <ng-option *ngFor="let cliente of clientes" [value]="cliente.id">{{cliente.Nome}} - {{cliente.CPF}}</ng-option>
             </ng-select>
         </div>
-        <div class="col-2 pb-3 ">
+        <div class="col-12 col-md-3 col-xl-2 pb-3 mr-md-3 ">
             <label class=" text-bold pr-3 mr-4">Clinte não registrado </label>
             <input class="p-2" style='margin-left: 0.2em;' (change)="changeCheckboxCliente($event.currentTarget.checked)" formControlName="clienteIsNotRegister" type="checkbox" />
         </div>
-        <div class="col-8 pb-3">
+        <div class="col-12 col-xl-8 pb-3">
             <label class="h4 text-bold">Serviços</label>
             <ng-select class="form-control" (ngModelChange)=" changeValue($event) " formControlName="servicos" multiple="true ">
                 <ng-option *ngFor="let servico of servicos " [value]="servico.id ">{{servico.Nome}}</ng-option>
             </ng-select>
         </div>
-        <div class="col-4 pb-3 ">
+        <div class="col-12 col-xl-4 pb-3 ">
             <label class="h4 text-bold ">Valor (R$)</label>
             <input formControlName="valor" class="form-control " type="number " />
         </div>
-        <div class="col-4 pb-3">
+        <div class="col-12 col-xl-4 pb-3">
             <label class="h4 text-bold">Data</label>
             <input class="form-control" formControlName="date" min="{{dataAtual}}" type="date" />
         </div>
-        <div class="col-4 pb-3">
+        <div class="col-12 col-xl-4 pb-3">
             <label class="h4 text-bold">Hora inicial</label>
             <input (change)="changeHourInit($event.target.value)" min="09:00" max="19:00" class="form-control" formControlName="hora_inicio" type="time" />
         </div>
-        <div class="col-4 pb-3">
+        <div class="col-12 col-xl-4 pb-3">
             <label class="h4 text-bold">Hora final</label>
             <input (change)="changeHourFim($event.target.value)" class="form-control" formControlName="hora_fim" min="09:00" type="time" />
         </div>
-        <div class="col-4 pb-3 ">
+        <div class="col-12 col-xl-4 pb-3 ">
             <label class=" text-bold pr-3 mr-4">Tem pausa </label>
             <input class="p-2" style='margin-left: 0.2em;' (change)="changeCheckbox($event.currentTarget.checked)" formControlName="hasPause" type="checkbox" />
         </div>
@@ -57,15 +57,15 @@
             <div class="col-12 row" *ngFor="let i of pauses">
                 <label class="h4 text-bold mt-2">Pausa {{i}}</label>
 
-                <div class="col-5">
+                <div class="col-12 col-xl-5">
                     <label class="text-bold ">Hora inicial da pausa</label>
                     <input formControlName="hora_ini_pausa_{{i}}" class="form-control " type="time" />
                 </div>
-                <div class="col-5">
+                <div class="col-12 col-xl-5">
                     <label class="text-bold ">Hora final da pausa</label>
                     <input formControlName="hora_fim_pausa_{{i}}" class="form-control " type="time" />
                 </div>
-                <div class="col-2">
+                <div class="col-12 col-xl-2">
                     <button *ngIf="i==pauses.length && i>1" (click)="removePausa(i)" class="btn btn-danger fa fa-minus mt-4  p-2 px-3" style="margin-right:0.2em"></button>
                     <button *ngIf="i==pauses.length && 3>i" (click)="addPausa(i)" class="btn btn-primary fa fa-plus mt-4 p-2 px-3"></button>
                 </div>

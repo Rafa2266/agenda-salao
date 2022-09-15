@@ -1,5 +1,5 @@
 <div class="container" [ngClass]="{'loading': isLoading}">
-    <div class="card  w-50 mt-3 shadow-lg">
+    <div class="card col-12 col-md-6 col-xl-4 mt-3 shadow-lg">
         <div class="card-header bg-primary px-0">
             <div class="row">
                 <div class="container col-12 px-0">
@@ -13,7 +13,7 @@
         </div>
         <div class="card-body" style="background-color:rgb(218, 218, 218)">
             <p *ngIf="message" class="h5 btn-danger p-3 text-center">{{message}}</p>
-            <form [formGroup]="formLogin" class="form-row px-5 pt-3 pb-2">
+            <form [formGroup]="formLogin" class="form-row px-0 px-md-3 px-lg-5 pt-3 pb-2">
                 <div class="col-12 pb-4">
                     <label class="h4 text-bold">Email</label>
                     <input class="form-control" formControlName="email" type="email" />
