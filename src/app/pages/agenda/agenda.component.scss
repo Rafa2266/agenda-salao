@@ -47,3 +47,9 @@
     color: white;
     background-color: rgb(241, 4, 4);
 }
+
+@media (max-width:768px) {
+    #addUser {
+        justify-content: left;
+    }
+}

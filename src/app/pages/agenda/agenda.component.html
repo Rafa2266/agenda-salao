@@ -3,17 +3,17 @@
 <hr class="mt-2" style="border: 1px solid #444444; width:100%; " />
 <div class="row px-2 mt-3" [ngClass]="{'loading': isLoading}">
     <div class="col-12 row mb-2">
-        <form *ngIf="formDateUser" class="col-8 form-row row" [formGroup]="formDateUser">
-            <div class="col-6">
+        <form *ngIf="formDateUser" class="col-12 col-md-8 form-row row" [formGroup]="formDateUser">
+            <div class="col-12 col-md-6 mb-4 mb-md-0">
                 <select formControlName="user" (change)="changeUser($event.target.value)">
                     <option *ngFor="let user of users" value="{{user.id}}">{{user.Nome}}</option>
                 </select>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6 mb-4 mb-md-0">
                 <p>De <input (change)="selectDays($event.target.value)" formControlName="date" type="date"> para {{dataFuturo | date: 'dd/MM/yyyy'}}</p>
             </div>
         </form>
-        <div *ngIf="userAtual?4>userAtual.id_tipo:false" class="col-4" id="addUser">
+        <div *ngIf="userAtual?4>userAtual.id_tipo:false" class="col-12 col-md-4 " id="addUser">
             <button class="btn btn-danger" (click)="showIntervaloModal(null)">
                 Adicionar intervalo<span style='margin-left: 0.2em;'class=" fa fa-plus"></span>
              </button>
@@ -23,7 +23,7 @@
         </div>
     </div>
     <div class="container scrolling-wrapper row flex-row flex-nowrap ">
-        <div class='col-3 card mb-2' *ngFor="let dia of dias_select">
+        <div class='col-12 col-sm-6 col-md-4 col-xl-3 card mb-2' *ngFor="let dia of dias_select">
             <div class="card-header">
                 <h3>{{dia.semana}}</h3>
                 <h4 class="mt-2">{{dia.date | date:'dd/MM/yyyy'}}</h4>

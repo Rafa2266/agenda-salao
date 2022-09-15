@@ -9,23 +9,23 @@
 <div class="modal-body" style="background-color:rgb(218, 218, 218)">
     <p *ngIf="message" class="h5 btn-danger p-3 text-center">{{message}}</p>
     <form [formGroup]="formIntervalo" class=" form-row row">
-        <div class="col-7 pb-3">
+        <div class="col-12 col-md-7 pb-3">
             <label class="h4 text-bold">Funcionário</label>
             <p class="form-control">{{userSelect.Nome}}</p>
         </div>
-        <div class="col-6 pb-3">
+        <div class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Hora do começo do intervalo</label>
             <input class="form-control" formControlName="hora_inicio" type="time" />
         </div>
-        <div class="col-6 pb-3">
+        <div class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Hora do final do intervalo</label>
             <input class="form-control" formControlName="hora_fim" type="time" />
         </div>
-        <div *ngIf="!isEdit" class="col-6 pb-3">
+        <div *ngIf="!isEdit" class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Marcar a partir do dia</label>
             <input class="form-control" formControlName="date_ini" type="date" />
         </div>
-        <div *ngIf="!isEdit" class="col-6 pb-3">
+        <div *ngIf="!isEdit" class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Até o dia</label>
             <input class="form-control" formControlName="date_fim" type="date" />
         </div>
