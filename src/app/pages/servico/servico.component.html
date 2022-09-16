@@ -9,7 +9,7 @@
     </div>
     <div class="col-12">
         <div class="list-group">
-            <div class="list-group-item first-item text-bold text-white bg-primary">
+            <div class="list-group-item first-item text-bold d-none d-md-block text-white bg-primary">
                 <div class="row">
                     <div class="col-3">
                         <div>Nome</div>
@@ -17,35 +17,40 @@
                     <div class="col-3">
                         <div>Valor recomendado</div>
                     </div>
-                    <div class="col-5">
+                    <div class="col-4">
                         <div>Tempo recomendado (minutos) </div>
                     </div>
-                    <div class="col-1">
+                    <div class="col-2">
                         <div>Opções</div>
                     </div>
                 </div>
             </div>
             <div class="list-group-item list-group-item-action border-black" *ngFor="let servico of servicos">
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-6 col-md-3">
+                        <p class=" d-block d-md-none text-negrito">Nome:</p>
                         <p class="">{{ servico.Nome }}</p>
                     </div>
-                    <div class="col-3" *ngIf="servico.Valor_recomendado">
+                    <div class="col-6 col-md-3" *ngIf="servico.Valor_recomendado">
+                        <p class=" d-block d-md-none text-negrito">Valor recomendado:</p>
                         <p class="">R${{ servico.Valor_recomendado.toFixed(2)}}</p>
                     </div>
-                    <div class="col-3" *ngIf="!servico.Valor_recomendado">
+                    <div class="col-6 col-md-3" *ngIf="!servico.Valor_recomendado">
+                        <p class=" d-block d-md-none text-negrito">Valor recomendado:</p>
                         <p class="">Não informado</p>
                     </div>
-                    <div class="col-5" *ngIf="servico.Tempo_recomendado">
+                    <div class="col-12 col-md-4" *ngIf="servico.Tempo_recomendado">
+                        <p class=" d-block d-md-none text-negrito">Tempo recomendado (minutos):</p>
                         <p class="">{{servico.Tempo_recomendado}}</p>
                     </div>
 
-                    <div class="col-5" *ngIf="!servico.Tempo_recomendado">
+                    <div class="col-12 col-md-4" *ngIf="!servico.Tempo_recomendado">
+                        <p class=" d-block d-md-none text-negrito">Tempo recomendado:</p>
                         <p class="">Não Informado</p>
                     </div>
 
 
-                    <div class="col-1">
+                    <div class="col-6 col-md-2">
                         <button (click)="showCreateModal(servico.id)" class="btn btn-dark fa fa-pencil " style="border-radius: 0;"></button>
                         <button (click)="deleteServico(servico)" class="btn btn-danger fa fa-trash " style="border-radius: 0; margin-left: .4em;"></button>
 

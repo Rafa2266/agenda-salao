@@ -10,34 +10,34 @@
 <div class="modal-body " style="background-color:rgb(218, 218, 218)">
     <form [formGroup]="formUser" class=" form-row row">
         <p *ngIf="message" class="h5 btn-danger p-3 text-center">{{message}}</p>
-        <div class="col-6 pb-3">
+        <div class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Nome Completo</label>
             <input class="form-control" formControlName="Nome" maxlength="250" type="text" />
         </div>
-        <div class="col-6 pb-3">
+        <div class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Email</label>
             <input class="form-control" formControlName="email" maxlength="250" placeholder="example@example.com" type="email" />
         </div>
 
-        <div class="col-3 pb-3">
+        <div class="col-12 col-md-3 pb-3">
             <label class="h4 text-bold">CPF</label>
             <input class="form-control" formControlName="cpf" placeholder="000.000.000-00" maxlength="14" type="text" />
         </div>
-        <div class="col-4 pb-3">
+        <div class="col-12 col-md-4 pb-3">
             <label class="h4 text-bold">Telefone</label>
             <input class="form-control" formControlName="Telefone" placeholder="(00) 00000-0000" maxlength="30" type="text" />
         </div>
-        <div class="col-5 pb-3">
+        <div class="col-12 col-md-5 pb-3">
             <label class="h4 text-bold">Tipo de usuário</label>
             <select class="p-2" formControlName="id_tipo" style="border-radius: 5px;">
                 <option *ngFor="let tipo of userTipos" value="{{tipo.id}}">{{tipo.Nome}}</option>
             </select>
         </div>
-        <div *ngIf="!isEdit" class="col-6 pb-3">
+        <div *ngIf="!isEdit" class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Password</label>
             <input class=" form-control" formControlName="password" type="password" />
         </div>
-        <div *ngIf="!isEdit" class="col-6 pb-3">
+        <div *ngIf="!isEdit" class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Confirm Password</label>
             <input class=" form-control" formControlName="confirm_password" type="password" />
         </div>

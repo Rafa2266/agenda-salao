@@ -9,9 +9,9 @@
     </div>
     <div class="col-12">
         <div class="list-group">
-            <div class="list-group-item first-item text-bold text-white bg-primary">
+            <div class="list-group-item first-item text-bold d-none d-md-block text-white bg-primary">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-3">
                         <div>Nome</div>
                     </div>
                     <div class="col-3">
@@ -23,26 +23,30 @@
                     <div class="col-2">
                         <div>Telefone</div>
                     </div>
-                    <div class="col-1">
+                    <div class="col-2">
                         <div>Opções</div>
                     </div>
                 </div>
             </div>
             <div class="list-group-item list-group-item-action border-black" *ngFor="let cliente of clientes">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-12 col-md-3">
+                        <p class=" d-block d-md-none text-negrito">Nome:</p>
                         <p class="">{{ cliente.Nome }}</p>
                     </div>
-                    <div class="col-3">
+                    <div class="col-12 col-md-3">
+                        <p class="text-bold d-block d-md-none text-negrito">Email:</p>
                         <p class="">{{ cliente.Email}}</p>
                     </div>
-                    <div class="col-2">
+                    <div class="col-6 col-md-2">
+                        <p class="text-bold d-block d-md-none text-negrito">CPF:</p>
                         <p class="">{{ cliente.CPF}}</p>
                     </div>
-                    <div class="col-2">
+                    <div class="col-6 col-md-2">
+                        <p class="text-bold d-block d-md-none text-negrito">Telefone:</p>
                         <p class="">{{ cliente.Telefone }}</p>
                     </div>
-                    <div class="col-1">
+                    <div class="col-6 col-md-2">
                         <button (click)="showCreateModal(cliente.id)" class="btn btn-dark fa fa-pencil " style="border-radius: 0;"></button>
                         <button (click)="deleteCliente(cliente)" class="btn btn-danger fa fa-trash " style="border-radius: 0; margin-left: .4em;"></button>
 

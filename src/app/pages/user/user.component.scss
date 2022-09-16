@@ -2,3 +2,25 @@
     display: flex;
     justify-content: right;
 }
+
+.user-item {
+    font-size: 1em;
+}
+
+@media (max-width:1240px) {
+    .user-item {
+        font-size: 0.6em;
+    }
+}
+
+@media (max-width:768px) {
+    .user-item {
+        font-size: 1em;
+    }
+}
+
+@media (max-width:340px) {
+    .user-item {
+        font-size: 0.7em;
+    }
+}

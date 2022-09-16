@@ -10,20 +10,20 @@
 <div class="modal-body " style="background-color:rgb(218, 218, 218)">
     <form [formGroup]="formCliente" class=" form-row row">
         <p *ngIf="message" class="h5 btn-danger p-3 text-center">{{message}}</p>
-        <div class="col-6 pb-3">
+        <div class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Nome Completo</label>
             <input class="form-control" formControlName="Nome" maxlength="250" type="text" />
         </div>
-        <div class="col-6 pb-3">
+        <div class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Email</label>
             <input class="form-control" formControlName="email" maxlength="250" placeholder="example@example.com" type="email" />
         </div>
 
-        <div class="col-6 pb-3">
+        <div class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">CPF</label>
             <input class="form-control" formControlName="cpf" placeholder="000.000.000-00" maxlength="14" type="text" />
         </div>
-        <div class="col-6 pb-3">
+        <div class="col-12 col-md-6 pb-3">
             <label class="h4 text-bold">Telefone</label>
             <input class="form-control" formControlName="Telefone" placeholder="(00) 00000-0000" maxlength="30" type="text" />
         </div>

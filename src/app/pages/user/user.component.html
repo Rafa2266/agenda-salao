@@ -9,9 +9,9 @@
     </div>
     <div class="col-12" *ngIf="users.length>0">
         <div class="list-group">
-            <div class="list-group-item first-item text-bold text-white bg-primary">
+            <div class="list-group-item first-item text-bold d-none d-md-block text-white bg-primary">
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-md-2 ">
                         <div>Nome</div>
                     </div>
                     <div class="col-2">
@@ -26,29 +26,34 @@
                     <div class="col-2">
                         <div>Tipo</div>
                     </div>
-                    <div class="col-1">
+                    <div class="col-md-2 ">
                         <div>Opções</div>
                     </div>
                 </div>
             </div>
             <div class="list-group-item list-group-item-action border-black" *ngFor="let user of users">
                 <div class="row">
-                    <div class="col-3">
-                        <p class="">{{ user.Nome }}</p>
+                    <div class="col-12 col-md-2 ">
+                        <p class=" d-block d-md-none text-negrito">Nome:</p>
+                        <p class="user-item">{{ user.Nome }}</p>
                     </div>
-                    <div class="col-2">
-                        <p class="">{{ user.Email}}</p>
+                    <div class="col-12 col-md-2">
+                        <p class=" d-block d-md-none text-negrito">Email:</p>
+                        <p class="user-item">{{ user.Email}}</p>
                     </div>
-                    <div class="col-2">
-                        <p class="">{{ user.CPF}}</p>
+                    <div class="col-6 col-md-2">
+                        <p class=" d-block d-md-none text-negrito">CPF:</p>
+                        <p class="user-item">{{ user.CPF}}</p>
                     </div>
-                    <div class="col-2">
-                        <p class="">{{ user.Telefone }}</p>
+                    <div class="col-6 col-md-2">
+                        <p class=" d-block d-md-none text-negrito">Telefone:</p>
+                        <p class="user-item">{{ user.Telefone }}</p>
                     </div>
-                    <div class="col-2">
-                        <p class="">{{findUserTipo(user.id_tipo)}}</p>
+                    <div class="col-12 col-md-2">
+                        <p class=" d-block d-md-none text-negrito">Tipo:</p>
+                        <p class="user-item">{{findUserTipo(user.id_tipo)}}</p>
                     </div>
-                    <div class="col-1">
+                    <div class="col-6 col-md-2 ">
                         <button (click)="showCreateModal(user.id)" class="btn btn-dark fa fa-pencil " style="border-radius: 0;"></button>
                         <button (click)="deleteUser(user)" class="btn btn-danger fa fa-trash " style="border-radius: 0; margin-left: .4em;"></button>
 
