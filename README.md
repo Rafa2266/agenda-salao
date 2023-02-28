@@ -4,7 +4,7 @@
 
 Esta aplicação é o front-end de um sistema de agendamento para salões de beleza, que realiza a marcação de atendimentos, pausas e intervalos. Além de também realizar o cadastramento de clientes, funcionários e serviços. Este sistema também possui níveis de permissão diferente para cada tipo de funcionário, estes tipos consistem em prestadoas de serviços, recepcionistas e proprietários.
 
-##Technical Characteristics
+## Technical Characteristics
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.9.
 
